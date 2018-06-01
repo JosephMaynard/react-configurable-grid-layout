@@ -15,12 +15,13 @@
 
 .ConfigurableGridItem, .ConfigurableGridItemEditor {
   position: relative;
+  transition: grid-row 2s;
 }
 
 .ConfigurableGridItemEditor_inner {
   position: absolute;
   background-color: rgba(255,0,0,0.3);
-  /* opacity: 0; */
+  opacity: 0;
   transition: opacity 0.3s;
   border: dashed rgb(48, 48, 143) 4px;
 }

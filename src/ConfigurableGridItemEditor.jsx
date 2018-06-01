@@ -17,48 +17,44 @@ class ConfigurableGridItemEditor extends React.Component {
       xPos: 0,
       yPos: 0,
       resizeActive: false,
+      currentRowStart: this.props.rowStart,
+      currentColEnd: this.props.colEnd,
+      currentRowEnd: this.props.rowEnd,
+      currentColStart: this.props.colStart,
     };
-  }
-  setColStart = value => {
-    this.props.updateGridItemProperty(this.props.index, 'colStart', value);
-  }
-  setColEnd = value => {
-    this.props.updateGridItemProperty(this.props.index, 'colEnd', value);
-  }
-  setRowStart = value => {
-    this.props.updateGridItemProperty(this.props.index, 'rowStart', value);
-  }
-  setRowEnd = value => {
-    this.props.updateGridItemProperty(this.props.index, 'rowEnd', value);
   }
   setInnerTop = value => {    const edgePosition = this.containerDiv.offsetTop + value;
     const rowStart = closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
-    if (rowStart !== this.props.rowStart) {
+    if (rowStart !== this.state.currentRowStart) {
       this.props.updateGridItemProperty(this.props.index, 'rowStart', rowStart);
+      this.setState({currentRowStart: rowStart});
     }
     this.setState({innerTop: value});
   }
   setInnerRight = value => {
     const edgePosition = this.containerDiv.offsetLeft + this.containerDiv.offsetWidth - value;
     const colEnd = closestArrayIndex(this.props.rowPositions, edgePosition) + 1;
-    if (colEnd !== this.props.colEnd) {
+    if (colEnd !== this.state.currentColEnd) {
       this.props.updateGridItemProperty(this.props.index, 'colEnd', colEnd);
+      this.setState({currentColEnd: colEnd});
     }
     this.setState({innerRight: value});
   }
   setInnerBottom = value => {
     const edgePosition = this.containerDiv.offsetTop + this.containerDiv.offsetHeight - value;
     const rowEnd = closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
-    if (rowEnd !== this.props.rowEnd) {
+    if (rowEnd !== this.state.currentRowEnd) {
       this.props.updateGridItemProperty(this.props.index, 'rowEnd', rowEnd);
+      this.setState({currentRowEnd: rowEnd});
     }
     this.setState({innerBottom: value});
   }
   setInnerLeft = value => {
     const edgePosition = this.containerDiv.offsetLeft + value;
     const colStart = closestArrayIndex(this.props.rowPositions, edgePosition) + 1;
-    if (colStart !== this.props.colStart) {
+    if (colStart !== this.state.currentColStart) {
       this.props.updateGridItemProperty(this.props.index, 'colStart', colStart);
+      this.setState({currentColStart: colStart});
     }
     this.setState({innerLeft: value});
   }
