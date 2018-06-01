@@ -2,11 +2,6 @@ import React from 'react';
 import ConfigurableGridItem from './ConfigurableGridItem';
 import ConfigurableGridItemEditor from './ConfigurableGridItemEditor';
 
-// Probaly a better way of doing this
-const closestArrayIndex = (array, target) => array.indexOf(array.reduce(function(prev, curr) {
-  return (Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev);
-}));
-
 const randomChar = () => (Math.floor(Math.random() * 6) + 5)
     .toString(16)
     .toUpperCase();
@@ -14,7 +9,6 @@ const randomChar = () => (Math.floor(Math.random() * 6) + 5)
 const randomHex = () => {
   return `#${randomChar()}${randomChar()}${randomChar()}`
 }
-
 
 class ConfigurableGrid extends React.Component {
   constructor(props){
@@ -79,19 +73,12 @@ class ConfigurableGrid extends React.Component {
       gridContainerHeight,
     });
   }
-  setColStart = (index, value) => {
-    this.setState({colStart: value});
+  updateGridItemProperty = (gridItemIndex, property, value) => {
+    const gridItems = this.state.gridItems.map(item => ({...item}));
+    gridItems[gridItemIndex][property] = value;
+    this.setState({gridItems});
   }
-  setColEnd = (index, value) => {
-    this.setState({colEnd: value});
-  }
-  setRowStart = (index, value) => {
-    this.setState({rowStart: value});
-  }
-  setRowEnd = (index, value) => {
-    this.setState({rowEnd: value});
-  }
-  updateGridCache = () => this.setState({gridCache: this.state.gridItems.map(item => ({...item}))});
+  updateGridCache = () => this.setState({gridLayoutCache: this.state.gridItems.map(item => ({...item}))});
   render(){
     return(
       <div
@@ -110,11 +97,15 @@ class ConfigurableGrid extends React.Component {
             index={index}
           />
         ))}
-        {this.props.editable && this.state.gridItems.map((item, index) => (
+        {this.props.editable && this.state.gridLayoutCache.map((item, index) => (
           <ConfigurableGridItemEditor
             {...item}
             key={index}
             index={index}
+            columnPositions={this.state.columnPositions}
+            rowPositions={this.state.rowPositions}
+            updateGridItemProperty={this.updateGridItemProperty}
+            updateGridCache={this.updateGridCache}
           />
         ))}
       </div>
