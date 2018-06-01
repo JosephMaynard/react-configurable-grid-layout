@@ -1,0 +1,129 @@
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  height: 100%;
+}
+
+.ConfigurableGrid {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  overflow: hidden;
+}
+
+.ConfigurableGridItem, .ConfigurableGridItemEditor {
+  position: relative;
+}
+
+.ConfigurableGridItemEditor_inner {
+  position: absolute;
+  background-color: rgba(255,0,0,0.3);
+  /* opacity: 0; */
+  transition: opacity 0.3s;
+  border: dashed rgb(48, 48, 143) 4px;
+}
+
+.ConfigurableGridItemEditor_inner:hover, .ConfigurableGridItemEditor_inner-active {
+  opacity: 1;
+}
+
+.ConfigurableGridItemEditorSizeControl {
+  background-color: #FFF;
+  border: solid 3px rgb(143, 143, 143);
+  width: 1.75rem;
+  height: 1.75rem;
+  position: absolute;
+  box-sizing: content-box;
+}
+
+.ConfigurableGridItemEditorSizeControl_topLeft {
+  border-bottom-right-radius: 0.5rem;
+  top: 0;
+  left: 0;
+  cursor: nwse-resize;
+  border-left: none;
+  border-top: none;
+}
+
+.ConfigurableGridItemEditorSizeControl_top {
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  cursor: ns-resize;
+  border-top: none;
+}
+
+.ConfigurableGridItemEditorSizeControl_topRight {
+  border-bottom-left-radius: 0.5rem;
+  top: 0;
+  right: 0;
+  cursor: nesw-resize;
+  border-right: none;
+  border-top: none;
+}
+
+.ConfigurableGridItemEditorSizeControl_left {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  cursor: ew-resize;
+  border-left: none;
+}
+
+.ConfigurableGridItemEditorSizeControl_center {
+  border-radius: 0.5rem;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  cursor: move;
+}
+
+.ConfigurableGridItemEditorSizeControl_right {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  cursor: ew-resize;
+  border-right: none;
+}
+
+.ConfigurableGridItemEditorSizeControl_bottomLeft {
+  border-top-right-radius: 0.5rem;
+  bottom: 0;
+  left: 0;
+  cursor: nesw-resize;
+  border-left: none;
+  border-bottom: none;
+}
+
+.ConfigurableGridItemEditorSizeControl_bottom {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  cursor: ns-resize;
+  border-bottom: none;
+}
+
+.ConfigurableGridItemEditorSizeControl_bottomRight {
+  border-top-left-radius: 0.5rem;
+  bottom: 0;
+  right: 0;
+  cursor: nwse-resize;
+  border-right: none;
+  border-bottom: none;
+}
