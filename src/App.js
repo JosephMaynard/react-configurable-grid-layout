@@ -11,7 +11,7 @@ class App extends React.Component {
       <ConfigurableGrid
         rows={4}
         columns={4}
-        gridGap={10}
+        gridGap={0}
         editable={this.state.editable}
       />
     );

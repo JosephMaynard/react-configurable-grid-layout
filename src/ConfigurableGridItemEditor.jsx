@@ -36,7 +36,7 @@ class ConfigurableGridItemEditor extends React.Component {
     );
     const edgePosition = this.containerDiv.offsetTop + innerTop;
     const rowStart =
-      closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
+      closestArrayIndex(this.props.rowPositions, edgePosition) + 1;
     if (rowStart !== this.state.currentRowStart) {
       this.props.updateGridItemProperty(this.props.index, 'rowStart', rowStart);
       this.setState({ currentRowStart: rowStart });
@@ -82,7 +82,7 @@ class ConfigurableGridItemEditor extends React.Component {
     );
     const edgePosition = this.containerDiv.offsetLeft + innerLeft;
     const colStart =
-      closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
+    closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
     if (colStart !== this.state.currentColStart) {
       this.props.updateGridItemProperty(this.props.index, 'colStart', colStart);
       this.setState({ currentColStart: colStart });
@@ -95,6 +95,18 @@ class ConfigurableGridItemEditor extends React.Component {
       0 - this.containerDiv.offsetLeft,
       this.props.gridContainerWidth - this.containerDiv.offsetLeft - this.containerDiv.offsetWidth
     );
+    const edgePosition = this.containerDiv.offsetLeft + xPos;
+    const colStart =
+    closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
+    if (colStart !== this.state.currentColStart) {
+      const columSpan = this.props.colEnd - this.props.colStart
+      this.props.updateGridItemProperty(this.props.index, 'colStart', colStart);
+      this.props.updateGridItemProperty(this.props.index, 'colEnd', colStart + columSpan);
+      this.setState({
+        currentColStart: colStart,
+        currentColEnd: colStart + columSpan,
+      });
+    }
     this.setState({ xPos });
   };
   setYPos = value => {
@@ -103,6 +115,18 @@ class ConfigurableGridItemEditor extends React.Component {
       0 - this.containerDiv.offsetTop,
       this.props.gridContainerHeight - this.containerDiv.offsetTop - this.containerDiv.offsetHeight
     );
+    const edgePosition = this.containerDiv.offsetTop + yPos;
+    const rowStart =
+    closestArrayIndex(this.props.rowPositions, edgePosition) + 1;
+    if (rowStart !== this.state.currentRowStart) {
+      const rowSpan = this.props.rowEnd - this.props.rowStart
+      this.props.updateGridItemProperty(this.props.index, 'rowStart', rowStart);
+      this.props.updateGridItemProperty(this.props.index, 'rowEnd', rowStart + rowSpan);
+      this.setState({
+        currentRowStart: rowStart,
+        currentRowEnd: rowStart + rowSpan,
+      });
+    }
     this.setState({ yPos });
   };
   setResizeActive = value => {
