@@ -50,7 +50,7 @@ class ConfigurableGridItemEditor extends React.Component {
     const edgePosition =
       this.containerDiv.offsetTop + this.containerDiv.offsetHeight - value;
     const rowEnd =
-      closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
+      closestArrayIndex(this.props.rowPositions, edgePosition) + 1;
     if (rowEnd !== this.state.currentRowEnd) {
       this.props.updateGridItemProperty(this.props.index, 'rowEnd', rowEnd);
       this.setState({ currentRowEnd: rowEnd });
