@@ -39,9 +39,13 @@ class ConfigurableGridItemEditor extends React.Component {
       closestArrayIndex(this.props.rowPositions, edgePosition) + 1;
     if (rowStart !== this.state.currentRowStart) {
       this.props.updateGridItemProperty(this.props.index, 'rowStart', rowStart);
-      this.setState({ currentRowStart: rowStart });
+      this.setState(() => ({
+        currentRowStart: rowStart,
+        innerTop,
+      }));
+    } else {
+      this.setState(() => ({ innerTop }));
     }
-    this.setState({ innerTop });
   };
   resizeRight = value => {
     const innerRight = clamp(
@@ -54,9 +58,13 @@ class ConfigurableGridItemEditor extends React.Component {
     const colEnd = closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
     if (colEnd !== this.state.currentColEnd) {
       this.props.updateGridItemProperty(this.props.index, 'colEnd', colEnd);
-      this.setState({ currentColEnd: colEnd });
+      this.setState(() => ({
+        currentColEnd: colEnd,
+        innerRight,
+      }));
+    } else {
+      this.setState(() => ({ innerRight }));
     }
-    this.setState({ innerRight });
   };
   resizeBottom = value => {
     const innerBottom = clamp(
@@ -70,9 +78,13 @@ class ConfigurableGridItemEditor extends React.Component {
       closestArrayIndex(this.props.rowPositions, edgePosition) + 1;
     if (rowEnd !== this.state.currentRowEnd) {
       this.props.updateGridItemProperty(this.props.index, 'rowEnd', rowEnd);
-      this.setState({ currentRowEnd: rowEnd });
+      this.setState(() => ({
+        currentRowEnd: rowEnd,
+        innerBottom,
+      }));
+    } else {
+      this.setState(() => ({ innerBottom }));
     }
-    this.setState({ innerBottom });
   };
   resizeLeft = value => {
     const innerLeft = clamp(
@@ -85,9 +97,13 @@ class ConfigurableGridItemEditor extends React.Component {
     closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
     if (colStart !== this.state.currentColStart) {
       this.props.updateGridItemProperty(this.props.index, 'colStart', colStart);
-      this.setState({ currentColStart: colStart });
+      this.setState(() => ({
+        currentColStart: colStart,
+        innerLeft,
+      }));
+    } else {
+      this.setState(() => ({ innerLeft }));
     }
-    this.setState({ innerLeft });
   };
   setXPos = value => {
     const xPos = clamp(
@@ -102,12 +118,14 @@ class ConfigurableGridItemEditor extends React.Component {
       const columSpan = this.props.colEnd - this.props.colStart
       this.props.updateGridItemProperty(this.props.index, 'colStart', colStart);
       this.props.updateGridItemProperty(this.props.index, 'colEnd', colStart + columSpan);
-      this.setState({
+      this.setState((prevState) => ({
         currentColStart: colStart,
-        currentColEnd: colStart + columSpan,
-      });
+        currentColEnd: prevState.colStart + columSpan,
+        xPos,
+      }));
+    } else {
+      this.setState(() => ({ xPos }));
     }
-    this.setState({ xPos });
   };
   setYPos = value => {
     const yPos = clamp(
@@ -122,12 +140,14 @@ class ConfigurableGridItemEditor extends React.Component {
       const rowSpan = this.props.rowEnd - this.props.rowStart
       this.props.updateGridItemProperty(this.props.index, 'rowStart', rowStart);
       this.props.updateGridItemProperty(this.props.index, 'rowEnd', rowStart + rowSpan);
-      this.setState({
+      this.setState((prevState) => ({
         currentRowStart: rowStart,
-        currentRowEnd: rowStart + rowSpan,
-      });
+        currentRowEnd: prevState.rowStart + rowSpan,
+        yPos,
+      }));
+    } else {
+      this.setState(() => ({ yPos }));
     }
-    this.setState({ yPos });
   };
   setResizeActive = value => {
     this.setState({ resizeActive: value });
