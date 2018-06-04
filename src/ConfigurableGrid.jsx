@@ -2,38 +2,39 @@ import React from 'react';
 import ConfigurableGridItem from './ConfigurableGridItem';
 import ConfigurableGridItemEditor from './ConfigurableGridItemEditor';
 
-const randomChar = () => (Math.floor(Math.random() * 6) + 5)
-    .toString(16)
-    .toUpperCase();
+const randomChar = () =>
+  (Math.floor(Math.random() * 6) + 5).toString(16).toUpperCase();
 
 const randomHex = () => {
-  return `#${randomChar()}${randomChar()}${randomChar()}`
-}
+  return `#${randomChar()}${randomChar()}${randomChar()}`;
+};
 
-const createGridMap = (rows, columns) =>  Array.from(
-  {length: rows},
-  () => Array.from(
-    {length: columns},
-    () => 0));
+const createGridMap = (rows, columns) =>
+  Array.from({ length: rows }, () => Array.from({ length: columns }, () => 0));
 
 const mapItemCSSPropertiesToGridMap = (
   gridMap,
   colStart,
   colEnd,
   rowStart,
-  rowEnd ) => gridMap.map((row, rowIndex) => row.map((columnValue, columnIndex) => {
-    if (
-      rowIndex >= rowStart - 1 &&
-      rowIndex <= rowEnd - 2 &&
-      columnIndex >= colStart - 1 &&
-      columnIndex <= colEnd - 2 ) {
+  rowEnd
+) =>
+  gridMap.map((row, rowIndex) =>
+    row.map((columnValue, columnIndex) => {
+      if (
+        rowIndex >= rowStart - 1 &&
+        rowIndex <= rowEnd - 2 &&
+        columnIndex >= colStart - 1 &&
+        columnIndex <= colEnd - 2
+      ) {
         return columnValue + 1;
       }
       return columnValue;
-  }));
+    })
+  );
 
 class ConfigurableGrid extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       columnWidth: 0,
@@ -59,34 +60,36 @@ class ConfigurableGrid extends React.Component {
         },
       ],
       gridLayoutCache: [],
-    }
+    };
   }
-  componentDidMount(){
+  componentDidMount() {
     this.setGridSizes();
     this.updateGridCache();
     this.updateGridMap();
     window.addEventListener('resize', this.setGridSizes);
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     window.removeEventListener('resize', this.setGridSizes);
   }
   setGridSizes = () => {
     const gridContainerWidth = this.gridContainer.offsetWidth;
     const gridContainerHeight = this.gridContainer.offsetHeight;
     const columnWidth = Math.round(
-      (gridContainerWidth - (
-        this.props.gridGap * (this.props.columns - 1)
-      )) / this.props.columns);
-    const rowHeight =  Math.round(
-      (gridContainerHeight - (
-        this.props.gridGap * (this.props.rows - 1)
-      )) / this.props.rows);
+      (gridContainerWidth - this.props.gridGap * (this.props.columns - 1)) /
+        this.props.columns
+    );
+    const rowHeight = Math.round(
+      (gridContainerHeight - this.props.gridGap * (this.props.rows - 1)) /
+        this.props.rows
+    );
     const columnPositions = Array.from(
-      {length: this.props.columns + 1},
-      (value, index) => Math.floor(index * columnWidth));
+      { length: this.props.columns + 1 },
+      (value, index) => Math.floor(index * columnWidth)
+    );
     const rowPositions = Array.from(
-      {length: this.props.rows + 1},
-      (value, index) => Math.floor(index * columnWidth));
+      { length: this.props.rows + 1 },
+      (value, index) => Math.floor(index * columnWidth)
+    );
     this.setState({
       columnWidth,
       rowHeight,
@@ -95,27 +98,32 @@ class ConfigurableGrid extends React.Component {
       gridContainerWidth,
       gridContainerHeight,
     });
-  }
+  };
   updateGridItemProperty = (gridItemIndex, property, value) => {
-    const gridItems = this.state.gridItems.map(item => ({...item}));
+    const gridItems = this.state.gridItems.map(item => ({ ...item }));
     gridItems[gridItemIndex][property] = value;
-    this.setState({gridItems});
+    this.setState({ gridItems });
     this.updateGridMap();
-  }
-  updateGridCache = () => this.setState({gridLayoutCache: this.state.gridItems.map(item => ({...item}))});
+  };
+  updateGridCache = () =>
+    this.setState({
+      gridLayoutCache: this.state.gridItems.map(item => ({ ...item })),
+    });
   updateGridMap = () => {
     let gridMap = createGridMap(this.props.rows, this.props.columns);
     this.state.gridItems.forEach(gridItem => {
       gridMap = mapItemCSSPropertiesToGridMap(
-      gridMap,
-      gridItem.colStart,
-      gridItem.colEnd,
-      gridItem.rowStart,
-      gridItem.rowEnd)});
+        gridMap,
+        gridItem.colStart,
+        gridItem.colEnd,
+        gridItem.rowStart,
+        gridItem.rowEnd
+      );
+    });
     console.log(gridMap);
-  }
-  render(){
-    return(
+  };
+  render() {
+    return (
       <div
         className="ConfigurableGrid"
         style={{
@@ -123,28 +131,27 @@ class ConfigurableGrid extends React.Component {
           gridTemplateRows: `repeat(${this.props.rows}, 1fr)`,
           gridGap: `${this.props.gridGap}px`,
         }}
-        ref={( el ) => { this.gridContainer = el; }}
+        ref={el => {
+          this.gridContainer = el;
+        }}
       >
         {this.state.gridItems.map((item, index) => (
-          <ConfigurableGridItem
-            {...item}
-            key={index}
-            index={index}
-          />
+          <ConfigurableGridItem {...item} key={index} index={index} />
         ))}
-        {this.props.editable && this.state.gridLayoutCache.map((item, index) => (
-          <ConfigurableGridItemEditor
-            {...item}
-            key={index}
-            index={index}
-            columnPositions={this.state.columnPositions}
-            rowPositions={this.state.rowPositions}
-            updateGridItemProperty={this.updateGridItemProperty}
-            updateGridCache={this.updateGridCache}
-          />
-        ))}
+        {this.props.editable &&
+          this.state.gridLayoutCache.map((item, index) => (
+            <ConfigurableGridItemEditor
+              {...item}
+              key={index}
+              index={index}
+              columnPositions={this.state.columnPositions}
+              rowPositions={this.state.rowPositions}
+              updateGridItemProperty={this.updateGridItemProperty}
+              updateGridCache={this.updateGridCache}
+            />
+          ))}
       </div>
-    )
+    );
   }
 }
 

@@ -1,8 +1,8 @@
 import React from 'react';
 
 class ConfigurableGridItem extends React.Component {
-  render(){
-    return(
+  render() {
+    return (
       <div
         className="ConfigurableGridItem"
         style={{
@@ -10,8 +10,7 @@ class ConfigurableGridItem extends React.Component {
           gridRow: `${this.props.rowStart} / ${this.props.rowEnd}`,
           backgroundColor: this.props.backgroundColor,
         }}
-      >
-      </div>
+      />
     );
   }
 }

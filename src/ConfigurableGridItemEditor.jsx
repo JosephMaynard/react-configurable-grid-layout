@@ -2,12 +2,15 @@ import React from 'react';
 import ConfigurableGridItemEditorSizeControl from './ConfigurableGridItemEditorSizeControl';
 
 // Probaly a better way of doing this
-const closestArrayIndex = (array, target) => array.indexOf(array.reduce(function(prev, curr) {
-  return (Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev);
-}));
+const closestArrayIndex = (array, target) =>
+  array.indexOf(
+    array.reduce(function(prev, curr) {
+      return Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev;
+    })
+  );
 
 class ConfigurableGridItemEditor extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       innerTop: 0,
@@ -23,67 +26,83 @@ class ConfigurableGridItemEditor extends React.Component {
       currentColStart: this.props.colStart,
     };
   }
-  setInnerTop = value => {    const edgePosition = this.containerDiv.offsetTop + value;
-    const rowStart = closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
+  setInnerTop = value => {
+    const edgePosition = this.containerDiv.offsetTop + value;
+    const rowStart =
+      closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
     if (rowStart !== this.state.currentRowStart) {
       this.props.updateGridItemProperty(this.props.index, 'rowStart', rowStart);
-      this.setState({currentRowStart: rowStart});
+      this.setState({ currentRowStart: rowStart });
     }
-    this.setState({innerTop: value});
-  }
+    this.setState({ innerTop: value });
+  };
   setInnerRight = value => {
-    const edgePosition = this.containerDiv.offsetLeft + this.containerDiv.offsetWidth - value;
+    const edgePosition =
+      this.containerDiv.offsetLeft + this.containerDiv.offsetWidth - value;
     const colEnd = closestArrayIndex(this.props.rowPositions, edgePosition) + 1;
     if (colEnd !== this.state.currentColEnd) {
       this.props.updateGridItemProperty(this.props.index, 'colEnd', colEnd);
-      this.setState({currentColEnd: colEnd});
+      this.setState({ currentColEnd: colEnd });
     }
-    this.setState({innerRight: value});
-  }
+    this.setState({ innerRight: value });
+  };
   setInnerBottom = value => {
-    const edgePosition = this.containerDiv.offsetTop + this.containerDiv.offsetHeight - value;
-    const rowEnd = closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
+    const edgePosition =
+      this.containerDiv.offsetTop + this.containerDiv.offsetHeight - value;
+    const rowEnd =
+      closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
     if (rowEnd !== this.state.currentRowEnd) {
       this.props.updateGridItemProperty(this.props.index, 'rowEnd', rowEnd);
-      this.setState({currentRowEnd: rowEnd});
+      this.setState({ currentRowEnd: rowEnd });
     }
-    this.setState({innerBottom: value});
-  }
+    this.setState({ innerBottom: value });
+  };
   setInnerLeft = value => {
     const edgePosition = this.containerDiv.offsetLeft + value;
-    const colStart = closestArrayIndex(this.props.rowPositions, edgePosition) + 1;
+    const colStart =
+      closestArrayIndex(this.props.rowPositions, edgePosition) + 1;
     if (colStart !== this.state.currentColStart) {
       this.props.updateGridItemProperty(this.props.index, 'colStart', colStart);
-      this.setState({currentColStart: colStart});
+      this.setState({ currentColStart: colStart });
     }
-    this.setState({innerLeft: value});
-  }
+    this.setState({ innerLeft: value });
+  };
   setXPos = value => {
-    this.setState({xPos: value});
-  }
+    this.setState({ xPos: value });
+  };
   setYPos = value => {
-    this.setState({yPos: value});
-  }
+    this.setState({ yPos: value });
+  };
   setResizeActive = value => {
-    this.setState({resizeActive: value});
+    this.setState({ resizeActive: value });
     if (value === false) {
       this.props.updateGridCache();
     }
-  }
-  render(){
-    return(
+  };
+  render() {
+    return (
       <div
         className="ConfigurableGridItemEditor"
         style={{
           gridColumn: `${this.props.colStart} / ${this.props.colEnd}`,
           gridRow: `${this.props.rowStart} / ${this.props.rowEnd}`,
-          transform: `translateX(${this.state.xPos}px) translateY(${this.state.yPos}px) translateZ(0)`,
-          WebkitTransform: `translateX(${this.state.xPos}px) translateY(${this.state.yPos}px) translateZ(0)`,
+          transform: `translateX(${this.state.xPos}px) translateY(${
+            this.state.yPos
+          }px) translateZ(0)`,
+          WebkitTransform: `translateX(${this.state.xPos}px) translateY(${
+            this.state.yPos
+          }px) translateZ(0)`,
         }}
-        ref={( el ) => { this.containerDiv = el; }}
+        ref={el => {
+          this.containerDiv = el;
+        }}
       >
         <div
-          className={`ConfigurableGridItemEditor_inner${this.state.resizeActive ? ' ConfigurableGridItemEditor_inner-active' : ''}`}
+          className={`ConfigurableGridItemEditor_inner${
+            this.state.resizeActive
+              ? ' ConfigurableGridItemEditor_inner-active'
+              : ''
+          }`}
           style={{
             top: `${this.state.innerTop}px`,
             right: `${this.state.innerRight}px`,
