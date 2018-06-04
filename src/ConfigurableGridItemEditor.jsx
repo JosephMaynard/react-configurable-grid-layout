@@ -90,10 +90,20 @@ class ConfigurableGridItemEditor extends React.Component {
     this.setState({ innerLeft });
   };
   setXPos = value => {
-    this.setState({ xPos: value });
+    const xPos = clamp(
+      value,
+      0 - this.containerDiv.offsetLeft,
+      this.props.gridContainerWidth - this.containerDiv.offsetLeft - this.containerDiv.offsetWidth
+    );
+    this.setState({ xPos });
   };
   setYPos = value => {
-    this.setState({ yPos: value });
+    const yPos = clamp(
+      value,
+      0 - this.containerDiv.offsetTop,
+      this.props.gridContainerHeight - this.containerDiv.offsetTop - this.containerDiv.offsetHeight
+    );
+    this.setState({ yPos });
   };
   setResizeActive = value => {
     this.setState({ resizeActive: value });
