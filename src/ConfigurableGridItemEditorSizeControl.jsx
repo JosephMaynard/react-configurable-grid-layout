@@ -1,8 +1,6 @@
 import React from 'react';
 import Hammer from 'hammerjs';
 
-// const clamp = ( value, min, max ) => Math.min ( Math.max( min, value ), max );
-
 class ConfigurableGridItemEditorSizeControl extends React.Component {
   // constructor(props){
   //   super(props);

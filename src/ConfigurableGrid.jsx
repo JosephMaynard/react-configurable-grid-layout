@@ -148,6 +148,10 @@ class ConfigurableGrid extends React.Component {
               rowPositions={this.state.rowPositions}
               updateGridItemProperty={this.updateGridItemProperty}
               updateGridCache={this.updateGridCache}
+              columnWidth={this.state.columnWidth}
+              rowHeight={this.state.rowHeight}
+              gridContainerWidth={this.state.gridContainerWidth}
+              gridContainerHeight={this.state.gridContainerHeight}
             />
           ))}
       </div>
