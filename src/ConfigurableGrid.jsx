@@ -10,6 +10,28 @@ const randomHex = () => {
   return `#${randomChar()}${randomChar()}${randomChar()}`
 }
 
+const createGridMap = (rows, columns) =>  Array.from(
+  {length: rows},
+  () => Array.from(
+    {length: columns},
+    () => 0));
+
+const mapItemCSSPropertiesToGridMap = (
+  gridMap,
+  colStart,
+  colEnd,
+  rowStart,
+  rowEnd ) => gridMap.map((row, rowIndex) => row.map((columnValue, columnIndex) => {
+    if (
+      rowIndex >= rowStart - 1 &&
+      rowIndex <= rowEnd - 2 &&
+      columnIndex >= colStart - 1 &&
+      columnIndex <= colEnd - 2 ) {
+        return columnValue + 1;
+      }
+      return columnValue;
+  }));
+
 class ConfigurableGrid extends React.Component {
   constructor(props){
     super(props);
@@ -42,6 +64,7 @@ class ConfigurableGrid extends React.Component {
   componentDidMount(){
     this.setGridSizes();
     this.updateGridCache();
+    this.updateGridMap();
     window.addEventListener('resize', this.setGridSizes);
   }
   componentWillUnmount(){
@@ -77,8 +100,20 @@ class ConfigurableGrid extends React.Component {
     const gridItems = this.state.gridItems.map(item => ({...item}));
     gridItems[gridItemIndex][property] = value;
     this.setState({gridItems});
+    this.updateGridMap();
   }
   updateGridCache = () => this.setState({gridLayoutCache: this.state.gridItems.map(item => ({...item}))});
+  updateGridMap = () => {
+    let gridMap = createGridMap(this.props.rows, this.props.columns);
+    this.state.gridItems.forEach(gridItem => {
+      gridMap = mapItemCSSPropertiesToGridMap(
+      gridMap,
+      gridItem.colStart,
+      gridItem.colEnd,
+      gridItem.rowStart,
+      gridItem.rowEnd)});
+    console.log(gridMap);
+  }
   render(){
     return(
       <div
