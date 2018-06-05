@@ -34,34 +34,32 @@ const mapItemCSSPropertiesToGridMap = (
   );
 
 class ConfigurableGrid extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      columnWidth: 0,
-      rowHeight: 0,
-      gridContainerWidth: 0,
-      gridContainerHeight: 0,
-      columnPositions: [],
-      rowPositions: [],
-      gridItems: [
-        {
-          backgroundColor: randomHex(),
-          colStart: 2,
-          colEnd: 4,
-          rowStart: 2,
-          rowEnd: 4,
-        },
-        {
-          backgroundColor: randomHex(),
-          colStart: 4,
-          colEnd: 5,
-          rowStart: 4,
-          rowEnd: 5,
-        },
-      ],
-      gridLayoutCache: [],
-    };
+  state = {
+    columnWidth: 0,
+    rowHeight: 0,
+    gridContainerWidth: 0,
+    gridContainerHeight: 0,
+    columnPositions: [],
+    rowPositions: [],
+    gridItems: [
+      {
+        backgroundColor: randomHex(),
+        colStart: 2,
+        colEnd: 4,
+        rowStart: 2,
+        rowEnd: 4,
+      },
+      {
+        backgroundColor: randomHex(),
+        colStart: 4,
+        colEnd: 5,
+        rowStart: 4,
+        rowEnd: 5,
+      },
+    ],
+    gridLayoutCache: [],
   }
+  gridContainerRef = React.createRef();
   componentDidMount() {
     this.setGridSizes();
     this.updateGridCache();
@@ -81,8 +79,8 @@ class ConfigurableGrid extends React.Component {
     }
   }
   setGridSizes = () => {
-    const gridContainerWidth = this.gridContainer.offsetWidth;
-    const gridContainerHeight = this.gridContainer.offsetHeight;
+    const gridContainerWidth = this.gridContainerRef.current.offsetWidth;
+    const gridContainerHeight = this.gridContainerRef.current.offsetHeight;
     const columnWidth = Math.round(
       (gridContainerWidth - this.props.gridGap * (this.props.columns - 1)) /
         this.props.columns
@@ -131,6 +129,7 @@ class ConfigurableGrid extends React.Component {
     });
     console.log(gridMap);
   };
+
   render() {
     return (
       <div
@@ -140,9 +139,7 @@ class ConfigurableGrid extends React.Component {
           gridTemplateRows: `repeat(${this.props.rows}, 1fr)`,
           gridGap: `${this.props.gridGap}px`,
         }}
-        ref={el => {
-          this.gridContainer = el;
-        }}
+        ref={this.gridContainerRef}
       >
         {this.state.gridItems.map((item, index) => (
           <ConfigurableGridItem {...item} key={index} index={index} />
