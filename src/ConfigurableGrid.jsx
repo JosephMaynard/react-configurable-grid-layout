@@ -33,6 +33,23 @@ const mapItemCSSPropertiesToGridMap = (
     })
   );
 
+const checkForCollisions = (gridItems, rows, columns) => {
+  let gridMap = createGridMap(rows, columns);
+  gridItems.forEach(gridItem => {
+    gridMap = mapItemCSSPropertiesToGridMap(
+      gridMap,
+      gridItem.colStart,
+      gridItem.colEnd,
+      gridItem.rowStart,
+      gridItem.rowEnd
+    );
+  });
+  gridMap = [].concat(...gridMap);
+  const collisions = gridMap.filter(cell => cell > 1);
+  console.log(gridMap, collisions, collisions.length > 0);
+  return (collisions.length > 0);
+}
+
 class ConfigurableGrid extends React.Component {
   state = {
     columnWidth: 0,
@@ -109,8 +126,12 @@ class ConfigurableGrid extends React.Component {
   updateGridItemProperty = (gridItemIndex, property, value) => {
     const gridItems = this.state.gridItems.map(item => ({ ...item }));
     gridItems[gridItemIndex][property] = value;
-    this.setState({ gridItems });
-    this.updateGridMap();
+    if (checkForCollisions(gridItems, this.props.rows, this.props.columns) === false) {
+      this.setState({ gridItems });
+      this.updateGridMap();
+    } else {
+      console.log('Collision!');
+    }
   };
   updateGridCache = () =>
     this.setState({
