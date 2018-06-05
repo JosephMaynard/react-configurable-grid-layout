@@ -2,13 +2,13 @@ import React from 'react';
 import Hammer from 'hammerjs';
 
 class ConfigurableGridItemEditorSizeControl extends React.Component {
-  // constructor(props){
-  //   super(props);
-  // }
+  controlRef = React.createRef();
+
   componentDidMount() {
-    this.hammer = new Hammer(this.control, {
+    this.hammer = new Hammer(this.controlRef.current, {
       recognizers: [[Hammer.Pan, { direction: Hammer.DIRECTION_ALL }]],
     });
+
     this.hammer.on('pan', ev => {
       this.props.setResizeActive(true);
       if (this.props.position === 'topLeft') {
@@ -42,25 +42,26 @@ class ConfigurableGridItemEditorSizeControl extends React.Component {
       this.setVertical(0);
     });
   }
+
   setHorizontal = value => {
     if (this.props.horizontal !== undefined) {
       this.props.horizontal(value);
     }
   };
+
   setVertical = value => {
     if (this.props.vertical !== undefined) {
       this.props.vertical(value);
     }
   };
+
   render() {
     return (
       <div
         className={`ConfigurableGridItemEditorSizeControl ConfigurableGridItemEditorSizeControl_${
           this.props.position
         }`}
-        ref={el => {
-          this.control = el;
-        }}
+        ref={this.controlRef}
       />
     );
   }
