@@ -71,6 +71,15 @@ class ConfigurableGrid extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('resize', this.setGridSizes);
   }
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.columns !== prevProps.columns ||
+      this.props.rows !== prevProps.rows ||
+      this.props.gridGap !== prevProps.gridGap
+    ) {
+      this.setGridSizes();
+    }
+  }
   setGridSizes = () => {
     const gridContainerWidth = this.gridContainer.offsetWidth;
     const gridContainerHeight = this.gridContainer.offsetHeight;
@@ -88,7 +97,7 @@ class ConfigurableGrid extends React.Component {
     );
     const rowPositions = Array.from(
       { length: this.props.rows + 1 },
-      (value, index) => Math.floor(index * columnWidth)
+      (value, index) => Math.floor(index * rowHeight)
     );
     this.setState({
       columnWidth,
