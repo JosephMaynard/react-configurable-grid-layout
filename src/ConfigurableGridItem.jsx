@@ -25,7 +25,7 @@ ConfigurableGridItem.propTypes = {
   colEnd: PropTypes.number.isRequired,
   rowStart: PropTypes.number.isRequired,
   rowEnd: PropTypes.number.isRequired,
-  backgroundColor: PropTypes.number.isRequired,
+  backgroundColor: PropTypes.string.isRequired,
 };
 
 export default ConfigurableGridItem;

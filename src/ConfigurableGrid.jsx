@@ -1,13 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ConfigurableGridItem from './ConfigurableGridItem';
 import ConfigurableGridItemEditor from './ConfigurableGridItemEditor';
 
 const randomChar = () =>
   (Math.floor(Math.random() * 6) + 5).toString(16).toUpperCase();
 
-const randomHex = () => {
-  return `#${randomChar()}${randomChar()}${randomChar()}`;
-};
+const randomHex = () =>  `#${randomChar()}${randomChar()}${randomChar()}`;
 
 const createGridMap = (rows, columns) =>
   Array.from({ length: rows }, () => Array.from({ length: columns }, () => 0));
@@ -76,15 +75,11 @@ class ConfigurableGrid extends React.Component {
     ],
     gridLayoutCache: [],
   };
-  gridContainerRef = React.createRef();
   componentDidMount() {
     this.setGridSizes();
     this.updateGridCache();
     this.updateGridMap();
     window.addEventListener('resize', this.setGridSizes);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.setGridSizes);
   }
   componentDidUpdate(prevProps) {
     if (
@@ -95,16 +90,19 @@ class ConfigurableGrid extends React.Component {
       this.setGridSizes();
     }
   }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.setGridSizes);
+  }
   setGridSizes = () => {
     const gridContainerWidth = this.gridContainerRef.current.offsetWidth;
     const gridContainerHeight = this.gridContainerRef.current.offsetHeight;
     const columnWidth = Math.round(
       (gridContainerWidth - this.props.gridGap * (this.props.columns - 1)) /
-        this.props.columns
+      this.props.columns
     );
     const rowHeight = Math.round(
       (gridContainerHeight - this.props.gridGap * (this.props.rows - 1)) /
-        this.props.rows
+      this.props.rows
     );
     const columnPositions = Array.from(
       { length: this.props.columns + 1 },
@@ -123,6 +121,8 @@ class ConfigurableGrid extends React.Component {
       gridContainerHeight,
     });
   };
+
+  gridContainerRef = React.createRef();
 
   updateGridItemProperty = (gridItemIndex, property, value) => {
     const gridItems = this.state.gridItems.map(item => ({ ...item }));
@@ -214,5 +214,12 @@ class ConfigurableGrid extends React.Component {
     );
   }
 }
+
+ConfigurableGrid.propTypes = {
+  columns: PropTypes.number.isRequired,
+  rows: PropTypes.number.isRequired,
+  gridGap: PropTypes.number.isRequired,
+  editable: PropTypes.bool.isRequired,
+};
 
 export default ConfigurableGrid;
