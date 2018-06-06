@@ -185,6 +185,8 @@ class ConfigurableGrid extends React.Component {
           gridTemplateColumns: `repeat(${this.props.columns}, 1fr)`,
           gridTemplateRows: `repeat(${this.props.rows}, 1fr)`,
           gridGap: `${this.props.gridGap}px`,
+          msGridRows: (`${Math.round(this.state.gridContainerHeight / this.props.rows)}px `).repeat(this.props.rows),
+          msGridColumns: (`${Math.round(this.state.gridContainerWidth / this.props.columns)}px `).repeat(this.props.columns),
         }}
         ref={this.gridContainerRef}
       >

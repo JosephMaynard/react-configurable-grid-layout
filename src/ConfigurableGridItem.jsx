@@ -9,6 +9,10 @@ class ConfigurableGridItem extends React.Component {
           gridColumn: `${this.props.colStart} / ${this.props.colEnd}`,
           gridRow: `${this.props.rowStart} / ${this.props.rowEnd}`,
           backgroundColor: this.props.backgroundColor,
+          msGridColumn: this.props.colStart,
+          msGridColumnSpan: this.props.colEnd - this.props.colStart,
+          msGridRow: this.props.rowStart,
+          msGridRowSpan: this.props.rowEnd - this.props.rowStart,
         }}
       />
     );

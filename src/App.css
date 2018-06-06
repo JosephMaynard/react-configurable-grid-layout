@@ -10,12 +10,12 @@
   height: 100%;
   width: 100%;
   display: grid;
+  display: -ms-grid;
   overflow: hidden;
 }
 
 .ConfigurableGridItem, .ConfigurableGridItemEditor {
   position: relative;
-  transition: grid-row 2s;
 }
 
 .ConfigurableGridItemEditor_inner {
