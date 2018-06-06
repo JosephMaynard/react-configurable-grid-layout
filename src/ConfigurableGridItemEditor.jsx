@@ -136,12 +136,12 @@ class ConfigurableGridItemEditor extends React.Component {
         this.props.index,
         colStart,
         colStart + columSpan,
-        this.props.rowStart,
-        this.props.rowEnd
+        this.state.currentRowStart,
+        this.state.currentRowEnd
       );
       this.setState(prevState => ({
         currentColStart: colStart,
-        currentColEnd: prevState.colStart + columSpan,
+        currentColEnd: colStart + columSpan,
         xPos,
       }));
     } else {
@@ -164,14 +164,14 @@ class ConfigurableGridItemEditor extends React.Component {
       const rowSpan = this.props.rowEnd - this.props.rowStart;
       this.props.moveGridItem(
         this.props.index,
-        this.props.colStart,
-        this.props.colEnd,
+        this.state.currentColStart,
+        this.state.currentColEnd,
         rowStart,
         rowStart + rowSpan
       );
       this.setState(prevState => ({
         currentRowStart: rowStart,
-        currentRowEnd: prevState.rowStart + rowSpan,
+        currentRowEnd: rowStart + rowSpan,
         yPos,
       }));
     } else {
