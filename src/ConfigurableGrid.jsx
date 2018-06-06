@@ -47,8 +47,8 @@ const checkForCollisions = (gridItems, rows, columns) => {
   gridMap = [].concat(...gridMap);
   const collisions = gridMap.filter(cell => cell > 1);
   console.log(gridMap, collisions, collisions.length > 0);
-  return (collisions.length > 0);
-}
+  return collisions.length > 0;
+};
 
 class ConfigurableGrid extends React.Component {
   state = {
@@ -75,7 +75,7 @@ class ConfigurableGrid extends React.Component {
       },
     ],
     gridLayoutCache: [],
-  }
+  };
   gridContainerRef = React.createRef();
   componentDidMount() {
     this.setGridSizes();
@@ -123,20 +123,46 @@ class ConfigurableGrid extends React.Component {
       gridContainerHeight,
     });
   };
+
   updateGridItemProperty = (gridItemIndex, property, value) => {
     const gridItems = this.state.gridItems.map(item => ({ ...item }));
     gridItems[gridItemIndex][property] = value;
-    if (checkForCollisions(gridItems, this.props.rows, this.props.columns) === false) {
+    if (
+      checkForCollisions(gridItems, this.props.rows, this.props.columns) ===
+      false
+    ) {
       this.setState({ gridItems });
       this.updateGridMap();
     } else {
       console.log('Collision!');
     }
   };
+
+  moveGridItem = (gridItemIndex, colStart, colEnd, rowStart, rowEnd) => {
+    const gridItems = this.state.gridItems.map(item => ({ ...item }));
+    gridItems[gridItemIndex] = {
+      ...gridItems[gridItemIndex],
+      colStart,
+      colEnd,
+      rowStart,
+      rowEnd,
+    };
+    if (
+      checkForCollisions(gridItems, this.props.rows, this.props.columns) ===
+      false
+    ) {
+      this.setState({ gridItems });
+      this.updateGridMap();
+    } else {
+      console.log('Collision!');
+    }
+  };
+
   updateGridCache = () =>
     this.setState({
       gridLayoutCache: this.state.gridItems.map(item => ({ ...item })),
     });
+
   updateGridMap = () => {
     let gridMap = createGridMap(this.props.rows, this.props.columns);
     this.state.gridItems.forEach(gridItem => {
@@ -174,6 +200,7 @@ class ConfigurableGrid extends React.Component {
               columnPositions={this.state.columnPositions}
               rowPositions={this.state.rowPositions}
               updateGridItemProperty={this.updateGridItemProperty}
+              moveGridItem={this.moveGridItem}
               updateGridCache={this.updateGridCache}
               columnWidth={this.state.columnWidth}
               rowHeight={this.state.rowHeight}

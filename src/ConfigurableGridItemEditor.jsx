@@ -58,7 +58,9 @@ class ConfigurableGridItemEditor extends React.Component {
       this.containerDivRef.current.offsetWidth - this.props.columnWidth
     );
     const edgePosition =
-      this.containerDivRef.current.offsetLeft + this.containerDivRef.current.offsetWidth - innerRight;
+      this.containerDivRef.current.offsetLeft +
+      this.containerDivRef.current.offsetWidth -
+      innerRight;
     const colEnd =
       closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
     if (colEnd !== this.state.currentColEnd) {
@@ -130,11 +132,12 @@ class ConfigurableGridItemEditor extends React.Component {
       closestArrayIndex(this.props.columnPositions, edgePosition) + 1;
     if (colStart !== this.state.currentColStart) {
       const columSpan = this.props.colEnd - this.props.colStart;
-      this.props.updateGridItemProperty(this.props.index, 'colStart', colStart);
-      this.props.updateGridItemProperty(
+      this.props.moveGridItem(
         this.props.index,
-        'colEnd',
-        colStart + columSpan
+        colStart,
+        colStart + columSpan,
+        this.props.rowStart,
+        this.props.rowEnd
       );
       this.setState(prevState => ({
         currentColStart: colStart,
@@ -159,10 +162,11 @@ class ConfigurableGridItemEditor extends React.Component {
       closestArrayIndex(this.props.rowPositions, edgePosition) + 1;
     if (rowStart !== this.state.currentRowStart) {
       const rowSpan = this.props.rowEnd - this.props.rowStart;
-      this.props.updateGridItemProperty(this.props.index, 'rowStart', rowStart);
-      this.props.updateGridItemProperty(
+      this.props.moveGridItem(
         this.props.index,
-        'rowEnd',
+        this.props.colStart,
+        this.props.colEnd,
+        rowStart,
         rowStart + rowSpan
       );
       this.setState(prevState => ({
