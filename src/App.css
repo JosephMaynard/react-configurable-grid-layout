@@ -23,7 +23,15 @@
   background-color: rgba(255,0,0,0.3);
   opacity: 0;
   transition: opacity 0.3s;
-  border: dashed rgb(48, 48, 143) 4px;
+}
+.ConfigurableGridItemEditor_inner:before {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  border: dashed #2a263f 3px;
+  content: '';
+  box-sizing: border-box;
 }
 
 .ConfigurableGridItemEditor_inner:hover, .ConfigurableGridItemEditor_inner-active {
@@ -32,9 +40,9 @@
 
 .ConfigurableGridItemEditorSizeControl {
   background-color: #FFF;
-  border: solid 3px rgb(143, 143, 143);
-  width: 1.75rem;
-  height: 1.75rem;
+  border: solid 3px #2a263f;
+  width: 1.5rem;
+  height: 1.5rem;
   position: absolute;
   box-sizing: content-box;
 }
@@ -44,8 +52,6 @@
   top: 0;
   left: 0;
   cursor: nwse-resize;
-  border-left: none;
-  border-top: none;
 }
 
 .ConfigurableGridItemEditorSizeControl_top {
@@ -56,7 +62,6 @@
   right: 0;
   margin: auto;
   cursor: ns-resize;
-  border-top: none;
 }
 
 .ConfigurableGridItemEditorSizeControl_topRight {
@@ -64,8 +69,6 @@
   top: 0;
   right: 0;
   cursor: nesw-resize;
-  border-right: none;
-  border-top: none;
 }
 
 .ConfigurableGridItemEditorSizeControl_left {
@@ -76,7 +79,6 @@
   bottom: 0;
   margin: auto;
   cursor: ew-resize;
-  border-left: none;
 }
 
 .ConfigurableGridItemEditorSizeControl_center {
@@ -97,7 +99,6 @@
   bottom: 0;
   margin: auto;
   cursor: ew-resize;
-  border-right: none;
 }
 
 .ConfigurableGridItemEditorSizeControl_bottomLeft {
@@ -105,8 +106,6 @@
   bottom: 0;
   left: 0;
   cursor: nesw-resize;
-  border-left: none;
-  border-bottom: none;
 }
 
 .ConfigurableGridItemEditorSizeControl_bottom {
@@ -117,7 +116,6 @@
   right: 0;
   margin: auto;
   cursor: ns-resize;
-  border-bottom: none;
 }
 
 .ConfigurableGridItemEditorSizeControl_bottomRight {
@@ -125,6 +123,4 @@
   bottom: 0;
   right: 0;
   cursor: nwse-resize;
-  border-right: none;
-  border-bottom: none;
 }
