@@ -10,7 +10,7 @@ class App extends React.Component {
     return (
       <ConfigurableGrid
         rows={4}
-        columns={4}
+        columns={6}
         gridGap={0}
         editable={this.state.editable}
       />

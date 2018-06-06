@@ -4,9 +4,9 @@ import ConfigurableGridItem from './ConfigurableGridItem';
 import ConfigurableGridItemEditor from './ConfigurableGridItemEditor';
 
 const randomChar = () =>
-  (Math.floor(Math.random() * 6) + 5).toString(16).toUpperCase();
+  (Math.floor(Math.random() * 8) + 5).toString(16).toUpperCase();
 
-const randomHex = () =>  `#${randomChar()}${randomChar()}${randomChar()}`;
+const randomHex = () =>  `#${randomChar()}${randomChar()}${randomChar()}${randomChar()}${randomChar()}${randomChar()}`;
 
 const createGridMap = (rows, columns) =>
   Array.from({ length: rows }, () => Array.from({ length: columns }, () => 0));
@@ -60,14 +60,21 @@ class ConfigurableGrid extends React.Component {
     gridItems: [
       {
         backgroundColor: randomHex(),
-        colStart: 2,
-        colEnd: 4,
-        rowStart: 2,
+        colStart: 1,
+        colEnd: 5,
+        rowStart: 1,
         rowEnd: 4,
       },
       {
         backgroundColor: randomHex(),
-        colStart: 4,
+        colStart: 5,
+        colEnd: 7,
+        rowStart: 1,
+        rowEnd: 5,
+      },
+      {
+        backgroundColor: randomHex(),
+        colStart: 1,
         colEnd: 5,
         rowStart: 4,
         rowEnd: 5,
