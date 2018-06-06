@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ConfigurableGridItemEditorSizeControl from './ConfigurableGridItemEditorSizeControl';
 
 const clamp = (value, min, max) => Math.min(Math.max(min, value), max);
@@ -6,9 +7,10 @@ const clamp = (value, min, max) => Math.min(Math.max(min, value), max);
 // Probaly a better way of doing this
 const closestArrayIndex = (array, target) =>
   array.indexOf(
-    array.reduce(function(prev, curr) {
-      return Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev;
-    })
+    array.reduce(
+      (prev, curr) =>
+        Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev
+    )
   );
 
 class ConfigurableGridItemEditor extends React.Component {
@@ -26,7 +28,12 @@ class ConfigurableGridItemEditor extends React.Component {
     currentColStart: this.props.colStart,
   };
 
-  containerDivRef = React.createRef();
+  setResizeActive = value => {
+    this.setState({ resizeActive: value });
+    if (value === false) {
+      this.props.updateGridCache();
+    }
+  };
 
   resizeTop = value => {
     const innerTop = clamp(
@@ -119,7 +126,7 @@ class ConfigurableGridItemEditor extends React.Component {
     }
   };
 
-  setXPos = value => {
+  moveX = value => {
     const xPos = clamp(
       value,
       0 - this.containerDivRef.current.offsetLeft,
@@ -139,7 +146,7 @@ class ConfigurableGridItemEditor extends React.Component {
         this.state.currentRowStart,
         this.state.currentRowEnd
       );
-      this.setState(prevState => ({
+      this.setState(() => ({
         currentColStart: colStart,
         currentColEnd: colStart + columSpan,
         xPos,
@@ -149,7 +156,7 @@ class ConfigurableGridItemEditor extends React.Component {
     }
   };
 
-  setYPos = value => {
+  moveY = value => {
     const yPos = clamp(
       value,
       0 - this.containerDivRef.current.offsetTop,
@@ -169,7 +176,7 @@ class ConfigurableGridItemEditor extends React.Component {
         rowStart,
         rowStart + rowSpan
       );
-      this.setState(prevState => ({
+      this.setState(() => ({
         currentRowStart: rowStart,
         currentRowEnd: rowStart + rowSpan,
         yPos,
@@ -179,12 +186,7 @@ class ConfigurableGridItemEditor extends React.Component {
     }
   };
 
-  setResizeActive = value => {
-    this.setState({ resizeActive: value });
-    if (value === false) {
-      this.props.updateGridCache();
-    }
-  };
+  containerDivRef = React.createRef();
 
   render() {
     return (
@@ -243,8 +245,8 @@ class ConfigurableGridItemEditor extends React.Component {
           />
           <ConfigurableGridItemEditorSizeControl
             position="center"
-            horizontal={this.setXPos}
-            vertical={this.setYPos}
+            horizontal={this.moveX}
+            vertical={this.moveY}
             setResizeActive={this.setResizeActive}
           />
           <ConfigurableGridItemEditorSizeControl
@@ -274,5 +276,22 @@ class ConfigurableGridItemEditor extends React.Component {
     );
   }
 }
+
+ConfigurableGridItemEditor.propTypes = {
+  rowStart: PropTypes.number.isRequired,
+  colEnd: PropTypes.number.isRequired,
+  rowEnd: PropTypes.number.isRequired,
+  colStart: PropTypes.number.isRequired,
+  rowHeight: PropTypes.number.isRequired,
+  rowPositions: PropTypes.arrayOf(PropTypes.number).isRequired,
+  gridContainerWidth: PropTypes.number.isRequired,
+  columnWidth: PropTypes.number.isRequired,
+  columnPositions: PropTypes.arrayOf(PropTypes.number).isRequired,
+  gridContainerHeight: PropTypes.number.isRequired,
+  index: PropTypes.number.isRequired,
+  updateGridCache: PropTypes.func.isRequired,
+  updateGridItemProperty: PropTypes.func.isRequired,
+  moveGridItem: PropTypes.func.isRequired,
+};
 
 export default ConfigurableGridItemEditor;

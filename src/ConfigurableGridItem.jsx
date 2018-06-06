@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class ConfigurableGridItem extends React.Component {
   render() {
@@ -18,5 +19,13 @@ class ConfigurableGridItem extends React.Component {
     );
   }
 }
+
+ConfigurableGridItem.propTypes = {
+  colStart: PropTypes.number.isRequired,
+  colEnd: PropTypes.number.isRequired,
+  rowStart: PropTypes.number.isRequired,
+  rowEnd: PropTypes.number.isRequired,
+  backgroundColor: PropTypes.number.isRequired,
+};
 
 export default ConfigurableGridItem;
