@@ -135,8 +135,8 @@ class ConfigurableGrid extends React.Component {
     const gridItems = this.state.gridItems.map(item => ({ ...item }));
     gridItems[gridItemIndex][property] = value;
     if (
-      checkForCollisions(gridItems, this.props.rows, this.props.columns) ===
-      false
+      checkForCollisions(gridItems, this.props.rows, this.props.columns) === false ||
+      this.props.preventOverlaps === false
     ) {
       this.setState({ gridItems });
       this.updateGridMap();
@@ -155,8 +155,8 @@ class ConfigurableGrid extends React.Component {
       rowEnd,
     };
     if (
-      checkForCollisions(gridItems, this.props.rows, this.props.columns) ===
-      false
+      checkForCollisions(gridItems, this.props.rows, this.props.columns) === false ||
+      this.props.preventOverlaps === false
     ) {
       this.setState({ gridItems });
       this.updateGridMap();
@@ -227,6 +227,11 @@ ConfigurableGrid.propTypes = {
   rows: PropTypes.number.isRequired,
   gridGap: PropTypes.number.isRequired,
   editable: PropTypes.bool.isRequired,
+  preventOverlaps: PropTypes.bool,
 };
+
+ConfigurableGrid.defaultProps = {
+  preventOverlaps: true,
+}
 
 export default ConfigurableGrid;
