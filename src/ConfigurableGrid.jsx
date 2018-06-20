@@ -6,10 +6,13 @@ import ConfigurableGridItemEditor from './ConfigurableGridItemEditor';
 const randomChar = () =>
   (Math.floor(Math.random() * 8) + 5).toString(16).toUpperCase();
 
-const randomHex = () =>  `#${randomChar()}${randomChar()}${randomChar()}${randomChar()}${randomChar()}${randomChar()}`;
+const randomHex = () =>
+  `#${randomChar()}${randomChar()}${randomChar()}${randomChar()}${randomChar()}${randomChar()}`;
 
-const createGridMap = (rows, columns) =>
-  Array.from({ length: rows }, () => Array.from({ length: columns }, () => 0));
+const createGridMap = (rows, columns, content = 0) =>
+  Array.from({ length: rows }, () =>
+    Array.from({ length: columns }, () => content)
+  );
 
 const mapItemCSSPropertiesToGridMap = (
   gridMap,
@@ -32,6 +35,28 @@ const mapItemCSSPropertiesToGridMap = (
     })
   );
 
+const mapItemCSSPropertiesToTableHierarchy = (
+  gridMap,
+  colStart,
+  colEnd,
+  rowStart,
+  rowEnd,
+  itemIndex
+) =>
+  gridMap.map((row, rowIndex) =>
+    row.map((columnValue, columnIndex) => {
+      if (
+        rowIndex >= rowStart - 1 &&
+        rowIndex <= rowEnd - 2 &&
+        columnIndex >= colStart - 1 &&
+        columnIndex <= colEnd - 2
+      ) {
+        return itemIndex;
+      }
+      return columnValue;
+    })
+  );
+
 const checkForCollisions = (gridItems, rows, columns) => {
   let gridMap = createGridMap(rows, columns);
   gridItems.forEach(gridItem => {
@@ -47,6 +72,22 @@ const checkForCollisions = (gridItems, rows, columns) => {
   const collisions = gridMap.filter(cell => cell > 1);
   console.log(gridMap, collisions, collisions.length > 0);
   return collisions.length > 0;
+};
+
+const createTableHierarchy = (gridItems, rows, columns) => {
+  let gridMap = createGridMap(rows, columns, ' ');
+  gridItems.forEach((gridItem, itemIndex) => {
+    gridMap = mapItemCSSPropertiesToTableHierarchy(
+      gridMap,
+      gridItem.colStart,
+      gridItem.colEnd,
+      gridItem.rowStart,
+      gridItem.rowEnd,
+      itemIndex
+    );
+  });
+  console.log('Table Hierarchy');
+  console.log(gridMap);
 };
 
 class ConfigurableGrid extends React.Component {
@@ -105,11 +146,11 @@ class ConfigurableGrid extends React.Component {
     const gridContainerHeight = this.gridContainerRef.current.offsetHeight;
     const columnWidth = Math.round(
       (gridContainerWidth - this.props.gridGap * (this.props.columns - 1)) /
-      this.props.columns
+        this.props.columns
     );
     const rowHeight = Math.round(
       (gridContainerHeight - this.props.gridGap * (this.props.rows - 1)) /
-      this.props.rows
+        this.props.rows
     );
     const columnPositions = Array.from(
       { length: this.props.columns + 1 },
@@ -135,7 +176,8 @@ class ConfigurableGrid extends React.Component {
     const gridItems = this.state.gridItems.map(item => ({ ...item }));
     gridItems[gridItemIndex][property] = value;
     if (
-      checkForCollisions(gridItems, this.props.rows, this.props.columns) === false ||
+      checkForCollisions(gridItems, this.props.rows, this.props.columns) ===
+        false ||
       this.props.preventOverlaps === false
     ) {
       this.setState({ gridItems });
@@ -143,6 +185,7 @@ class ConfigurableGrid extends React.Component {
     } else {
       console.log('Collision!');
     }
+    createTableHierarchy(gridItems, this.props.rows, this.props.columns);
   };
 
   moveGridItem = (gridItemIndex, colStart, colEnd, rowStart, rowEnd) => {
@@ -155,7 +198,8 @@ class ConfigurableGrid extends React.Component {
       rowEnd,
     };
     if (
-      checkForCollisions(gridItems, this.props.rows, this.props.columns) === false ||
+      checkForCollisions(gridItems, this.props.rows, this.props.columns) ===
+        false ||
       this.props.preventOverlaps === false
     ) {
       this.setState({ gridItems });
@@ -192,8 +236,12 @@ class ConfigurableGrid extends React.Component {
           gridTemplateColumns: `repeat(${this.props.columns}, 1fr)`,
           gridTemplateRows: `repeat(${this.props.rows}, 1fr)`,
           gridGap: `${this.props.gridGap}px`,
-          msGridRows: (`${Math.round(this.state.gridContainerHeight / this.props.rows)}px `).repeat(this.props.rows),
-          msGridColumns: (`${Math.round(this.state.gridContainerWidth / this.props.columns)}px `).repeat(this.props.columns),
+          msGridRows: `${Math.round(
+            this.state.gridContainerHeight / this.props.rows
+          )}px `.repeat(this.props.rows),
+          msGridColumns: `${Math.round(
+            this.state.gridContainerWidth / this.props.columns
+          )}px `.repeat(this.props.columns),
         }}
         ref={this.gridContainerRef}
       >
@@ -232,6 +280,6 @@ ConfigurableGrid.propTypes = {
 
 ConfigurableGrid.defaultProps = {
   preventOverlaps: true,
-}
+};
 
 export default ConfigurableGrid;
