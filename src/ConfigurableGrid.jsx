@@ -3,92 +3,15 @@ import PropTypes from 'prop-types';
 import ConfigurableGridItem from './ConfigurableGridItem';
 import ConfigurableGridItemEditor from './ConfigurableGridItemEditor';
 
-const randomChar = () =>
-  (Math.floor(Math.random() * 8) + 5).toString(16).toUpperCase();
-
-const randomHex = () =>
-  `#${randomChar()}${randomChar()}${randomChar()}${randomChar()}${randomChar()}${randomChar()}`;
-
-const createGridMap = (rows, columns, content = 0) =>
-  Array.from({ length: rows }, () =>
-    Array.from({ length: columns }, () => content)
-  );
-
-const mapItemCSSPropertiesToGridMap = (
-  gridMap,
-  colStart,
-  colEnd,
-  rowStart,
-  rowEnd
-) =>
-  gridMap.map((row, rowIndex) =>
-    row.map((columnValue, columnIndex) => {
-      if (
-        rowIndex >= rowStart - 1 &&
-        rowIndex <= rowEnd - 2 &&
-        columnIndex >= colStart - 1 &&
-        columnIndex <= colEnd - 2
-      ) {
-        return columnValue + 1;
-      }
-      return columnValue;
-    })
-  );
-
-const mapItemCSSPropertiesToTableHierarchy = (
-  gridMap,
-  colStart,
-  colEnd,
-  rowStart,
-  rowEnd,
-  itemIndex
-) =>
-  gridMap.map((row, rowIndex) =>
-    row.map((columnValue, columnIndex) => {
-      if (
-        rowIndex >= rowStart - 1 &&
-        rowIndex <= rowEnd - 2 &&
-        columnIndex >= colStart - 1 &&
-        columnIndex <= colEnd - 2
-      ) {
-        return itemIndex;
-      }
-      return columnValue;
-    })
-  );
-
-const checkForCollisions = (gridItems, rows, columns) => {
-  let gridMap = createGridMap(rows, columns);
-  gridItems.forEach(gridItem => {
-    gridMap = mapItemCSSPropertiesToGridMap(
-      gridMap,
-      gridItem.colStart,
-      gridItem.colEnd,
-      gridItem.rowStart,
-      gridItem.rowEnd
-    );
-  });
-  gridMap = [].concat(...gridMap);
-  const collisions = gridMap.filter(cell => cell > 1);
-  console.log(gridMap, collisions, collisions.length > 0);
-  return collisions.length > 0;
-};
-
-const createTableHierarchy = (gridItems, rows, columns) => {
-  let gridMap = createGridMap(rows, columns, ' ');
-  gridItems.forEach((gridItem, itemIndex) => {
-    gridMap = mapItemCSSPropertiesToTableHierarchy(
-      gridMap,
-      gridItem.colStart,
-      gridItem.colEnd,
-      gridItem.rowStart,
-      gridItem.rowEnd,
-      itemIndex
-    );
-  });
-  console.log('Table Hierarchy');
-  console.log(gridMap);
-};
+import {
+  randomHex,
+  createGridMap,
+  supportsGrid,
+  mapItemCSSPropertiesToGridMap,
+  mapItemCSSPropertiesToTableHierarchy,
+  checkForCollisions,
+  createTableHierarchy,
+} from './helpers';
 
 class ConfigurableGrid extends React.Component {
   state = {
@@ -98,6 +21,7 @@ class ConfigurableGrid extends React.Component {
     gridContainerHeight: 0,
     columnPositions: [],
     rowPositions: [],
+    supportsGrid: supportsGrid(),
     gridItems: [
       {
         backgroundColor: randomHex(),
