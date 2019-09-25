@@ -5,12 +5,12 @@ import './App.css';
 class App extends React.Component {
   state = {
     editable: true,
-  }
+  };
   render() {
     return (
       <ConfigurableGrid
-        rows={4}
-        columns={6}
+        rows={3}
+        columns={3}
         gridGap={0}
         editable={this.state.editable}
       />

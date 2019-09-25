@@ -1,6 +1,6 @@
 {
   "name": "configurable-grid-layout-demo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "babel-polyfill": "^6.26.0",
